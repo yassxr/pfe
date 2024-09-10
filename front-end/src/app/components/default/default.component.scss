@@ -1,0 +1,35 @@
+.nav-tabs {
+  border-bottom: none !important;
+}
+body.berry-dark .nav-tabs .nav-link,
+body.berry-dark .tab-content {
+  box-shadow: none !important;
+  background: none !important;
+}
+
+.welcome-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('/assets/images/img.jpg') no-repeat center center/cover; // Remplacez par le chemin de votre image
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5); // Filtre légèrement noir
+    align-items: center;
+
+    h1 {
+      color: white;
+      font-size: 3rem;
+      font-weight: bold;
+    }
+  }
+}

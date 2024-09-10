@@ -1,0 +1,43 @@
+<div class="page-container">
+  <div class="table-container" *ngIf="eeps.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Raison Sociale</th>
+          <th>Sigle</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let eep of eeps">
+          <td>{{ eep.idEep }}</td>
+          <td>{{ eep.raison }}</td>
+          <td>{{ eep.sigle }}</td>
+          <td>
+            <button (click)="onDelete(eep.idEep)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="eeps.length === 0" class="no-data">
+    Aucune donnée d'EEP trouvée.
+  </div>
+  
+  <!-- Formulaire pour créer un nouveau EEP -->
+  <div class="form-container">
+    <h2>Créer un nouveau EEP</h2>
+    <form (ngSubmit)="onSubmit()" #eepForm="ngForm">
+      <div>
+        <label for="raison">Raison Sociale</label>
+        <input type="text" id="raison" [(ngModel)]="newEEP.raison" name="raison" required>
+      </div>
+      <div>
+        <label for="sigle">Sigle</label>
+        <input type="text" id="sigle" [(ngModel)]="newEEP.sigle" name="sigle" required>
+      </div>
+      <button type="submit" [disabled]="!eepForm.form.valid">Créer</button>
+    </form>
+  </div>
+</div>
