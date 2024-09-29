@@ -1,0 +1,36 @@
+<!-- Non-Validated Documents -->
+<div class="upload-document-container">
+    <h2 class="section-title">Vos documents non validés</h2>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Nom du fichier</th>
+                <th>Date de dépôt</th>
+                <th>Déposé par</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let document of documents">
+                <td>{{ document.fileName }}</td>
+                <td>{{ document.uploadDate | date:'short' }}</td>
+                <td>{{ document.submittedBy }}</td>
+                <td [ngClass]="{'status-validated': document.status === 'Validé', 'status-non-validated': document.status === 'Non validé'}">
+                    {{ document.status || 'N/A' }} <!-- Use N/A if status is undefined -->
+                    <td class="actions-column">
+                    <button (click)="downloadDocument(document.id)" class="download-button">
+                        <i class="fas fa-download"></i> Sauvegarder
+                    </button>
+                    <button 
+                    class="btn btn-danger btn-delete" 
+                    (click)="deleteDocument(document.id)"
+                    title="Delete Document">
+                    <i class="fas fa-trash-alt"></i> <!-- Font Awesome trash icon -->
+                    Supprimer
+                </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

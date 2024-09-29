@@ -1,0 +1,39 @@
+<div class="create-eep-container">
+  <h2 class="form-title">Créer un nouvel EEP</h2>
+  <form [formGroup]="createEepForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label for="name">Nom</label>
+        <input id="name" formControlName="name" type="text" required />
+        <div *ngIf="createEepForm.get('name').invalid && (createEepForm.get('name').touched || createEepForm.get('name').dirty)">
+          <small>Ce champ est requis</small>
+        </div>
+      </div>
+  
+      <div>
+        <label for="email">Email</label>
+        <input id="email" formControlName="email" type="email" required />
+        <div *ngIf="createEepForm.get('email').invalid && (createEepForm.get('email').touched || createEepForm.get('email').dirty)">
+          <small>Votre e-mail doit être vailde</small>
+        </div>
+      </div>
+  
+      <div>
+        <label for="sigle">Sigle</label>
+        <input id="sigle" formControlName="sigle" type="text" required />
+        <div *ngIf="createEepForm.get('sigle').invalid && (createEepForm.get('sigle').touched || createEepForm.get('sigle').dirty)">
+          <small>Ce champ est requis</small>
+        </div>
+      </div>
+
+      <div>
+        <label for="sigle">Raison sociale</label>
+        <input id="sigle" formControlName="raison" type="text" required />
+        <div *ngIf="createEepForm.get('raison').invalid && (createEepForm.get('raison').touched || createEepForm.get('raison').dirty)">
+          <small>Ce champ est requis</small>
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="createEepForm.invalid">Créer</button>
+    </form>
+  </div>
+  

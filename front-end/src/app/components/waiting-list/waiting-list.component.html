@@ -1,0 +1,34 @@
+<!-- Document Waiting List -->
+<div class="upload-document-container">
+  <h2 class="section-title">Documents en attente</h2>
+  <table class="styled-table">
+      <thead>
+          <tr>
+              <th>Nom du fichier</th>
+              <th>Date de dépôt</th>
+              <th>Status</th>
+              <th>Déposé par</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let document of documents">
+              <td>{{ document.fileName }}</td>
+              <td>{{ document.uploadDate | date:'short' }}</td>
+              <td>{{ document.status }}</td>
+              <td>{{ document.submittedBy }}</td>
+              <td class="actions-column">
+                  <a (click)="downloadDocument(document.id)" class="download-button">
+                      <i class="fas fa-download"></i> Sauvegarder
+                  </a>
+                  <button class="validate-button" (click)="setStatus(document.id, 'Validé')">
+                      <i class="fas fa-check"></i> Valider
+                  </button>
+                  <button class="not-validate-button" (click)="setStatus(document.id, 'Non validé')">
+                      <i class="fas fa-times"></i> Rejeter
+                  </button>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>

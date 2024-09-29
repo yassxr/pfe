@@ -10,10 +10,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.example.pfe.entity.User;
 
 @Service
 public class JwtService {
@@ -32,23 +35,23 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
-
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+    // Method that generates the token directly from User
+    public String generateToken(User user) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", user.getId()); // Add user ID to claims
+        extraClaims.put("username", user.getName()); // Add username to claims
+        extraClaims.put("roles", user.getAuthorities().stream()
+            .map(grantedAuthority -> grantedAuthority.getAuthority())
+            .collect(Collectors.toList())); // Collect roles
+        
+        return buildToken(extraClaims, user, jwtExpiration);
     }
 
     public long getExpirationTime() {
         return jwtExpiration;
     }
 
-    private String buildToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails,
-            long expiration
-    ) {
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)

@@ -1,0 +1,29 @@
+<!-- eep-old.component.html -->
+<div class="eep-old-container">
+    <h2 class="old-title">EEPs antérieurs</h2>
+    <table class="old-eep-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Sigle</th>
+          <th>Raison sociale</th>
+          <th>Date de fin</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let eep of oldEepList">
+          <td>{{ eep.name }}</td>
+          <td>{{ eep.email }}</td>
+          <td>{{ eep.sigle }}</td>
+          <td>{{ eep.raison }}</td>
+          <td>{{ eep.endDate | date:'shortDate' }}</td>
+          <td>
+            <button class="btn btn-edit" (click)="editEep(eep.email)">Modifier</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

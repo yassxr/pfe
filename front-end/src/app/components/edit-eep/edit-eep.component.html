@@ -1,0 +1,27 @@
+<div class="edit-eep-container">
+    <h2 class="form-title">Modifier EEP</h2>
+    <form [formGroup]="eepForm" (ngSubmit)="onSubmit()" class="eep-form">
+      <div class="form-group">
+        <label for="name">Nom:</label>
+        <input id="name" formControlName="name" type="text" class="form-control" />
+      </div>
+      
+      <div class="form-group">
+        <label for="sigle">Sigle:</label>
+        <input id="sigle" formControlName="sigle" type="text" class="form-control" />
+      </div>
+      
+      <div class="form-group">
+        <label for="raison">Raison sociale:</label>
+        <input id="raison" formControlName="raison" type="text" class="form-control" />
+      </div>
+      
+      <div class="form-group">
+        <label for="endDate">Date de fin:</label>
+        <input id="endDate" formControlName="endDate" type="date" class="form-control" />
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Sauvegarder</button>
+    </form>
+  </div>
+  

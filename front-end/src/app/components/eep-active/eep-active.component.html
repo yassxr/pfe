@@ -1,0 +1,29 @@
+  <div class="eep-active-container">
+    <h2 class="active-title">EEPs actifs</h2>
+  <table class="active-eep-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Date de création</th>
+        <th>Date de fin</th>
+        <th>Raison sociale</th>
+        <th>Sigle</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let eep of eepUsers">
+        <td>{{ eep.name }}</td>
+        <td>{{ eep.email }}</td>
+        <td>{{ eep.creationDate | date:'shortDate' }}</td>
+        <td>{{ eep.endDate ? (eep.endDate | date:'shortDate') : 'N/A' }}</td>
+        <td>{{ eep.raison }}</td>
+        <td>{{ eep.sigle }}</td>
+        <td>
+          <button (click)="editEepUser(eep.email)" class="btn btn-edit">Modifier</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

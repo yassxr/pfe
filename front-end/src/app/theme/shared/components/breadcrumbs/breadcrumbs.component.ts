@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 // project import
-import { NavigationItem } from '../../../layout/admin/navigation/navigation';
+import { NavigationService } from '../../../layout/admin/navigation/navigation'; // Change this to the correct import
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -23,7 +23,7 @@ export class BreadcrumbsComponent {
   // Constructor
   constructor(
     private _router: Router,
-    public nav: NavigationItem,
+    public nav: NavigationService,
     private titleService: Title
   ) {
     this.navigation = this.nav.get();

@@ -9,37 +9,32 @@
           <div class="row">
             <div class="d-flex justify-content-center">
               <div class="auth-header">
-                <h2 class="text-secondary mt-5"><b>Hi, Welcome Back</b></h2>
-                <p class="fs-4 mt-2">Enter your credentials to continue</p>
+                <h2 class="text-secondary mt-5"><b>Connexion</b></h2>
+                <p class="fs-4 mt-2">Entrez vos coordonnées</p>
               </div>
             </div>
           </div>
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <div class="form-floating mb-3">
               <input type="email" class="form-control" id="floatingInput" formControlName="email" />
-              <label for="floatingInput">Email address / Username</label>
+              <label for="floatingInput">Email / Nom d'utilisateur</label>
             </div>
             <div class="form-floating mb-3">
               <input type="password" class="form-control" id="password" formControlName="password" />
-              <label for="password">Password</label>
+              <label for="password">Mot de passe</label>
             </div>
             <div class="d-flex mt-1 justify-content-between">
               <div class="form-check">
                 <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" />
-                <label class="form-check-label text-muted" for="customCheckc1">Remember me</label>
               </div>
-              <h5 class="text-secondary">
-                <a href="javascript:">Forgot Password?</a>
-              </h5>
             </div>
             <div class="d-grid mt-4">
-              <button type="submit" class="btn btn-secondary" [disabled]="loading">Sign In</button>
+              <button type="submit" class="btn btn-secondary" [disabled]="loading">Connectez-vous</button>
             </div>
-            <div *ngIf="error" class="alert alert-danger mt-3">{{error}}</div>
           </form>
           <hr />
           <h5 class="d-flex justify-content-center">
-            <a [routerLink]="['/guest/register']">Don't have an account?</a>
+            <a [routerLink]="['/guest/register']">Vous n'avez pas de compte?</a>
           </h5>
         </div>
       </div>

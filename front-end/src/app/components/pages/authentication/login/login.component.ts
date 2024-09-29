@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../service/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule], // Ensure these imports are included
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -19,12 +20,11 @@ export default class LoginComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService
   ) {
     if (this.authService.currentUserValue) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/default']);
     }
   }
 
@@ -34,7 +34,7 @@ export default class LoginComponent {
       password: ['', Validators.required]
     });
 
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = '/default'; // Set default return URL after login
   }
 
   get f() { return this.loginForm.controls; }
@@ -50,7 +50,7 @@ export default class LoginComponent {
     this.authService.login(this.f['email'].value, this.f['password'].value)
       .subscribe({
         next: () => {
-          this.router.navigate([this.returnUrl]);
+          this.router.navigate(['/default']);
         },
         error: error => {
           this.error = error;

@@ -1,0 +1,30 @@
+.upload-document-container {
+    h2 {
+      margin-bottom: 1rem;
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      
+      th {
+        background-color: #f4f4f4;
+      }
+  
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+  
+      .download-button {
+        color: blue;
+        text-decoration: underline;
+      }
+    }
+  }
+  
