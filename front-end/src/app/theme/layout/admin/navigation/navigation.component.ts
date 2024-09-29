@@ -1,5 +1,6 @@
 // Angular import
 import { Component, EventEmitter, Output } from '@angular/core';
+import { NavigationService, NavigationItem } from './navigation'; // Update the import path as needed
 
 @Component({
   selector: 'app-navigation',
@@ -11,6 +12,12 @@ export class NavigationComponent {
   @Output() NavCollapsedMob = new EventEmitter();
   navCollapsedMob = window.innerWidth;
   windowWidth: number;
+  navigationItems: NavigationItem[] = []; // To hold filtered navigation items
+
+  // Constructor
+  constructor(private navigationService: NavigationService) {
+    this.navigationItems = this.navigationService.get(); // Fetch navigation items
+  }
 
   // public method
   navCollapseMob() {

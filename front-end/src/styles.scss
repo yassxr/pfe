@@ -9,7 +9,6 @@ File: style.css
 =================================================================================== */
 
 // main framework
-// main framework
 @import 'node_modules/bootstrap/scss/functions';
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/variables-dark';
@@ -17,6 +16,7 @@ File: style.css
 @import 'scss/settings/color-variables';
 @import 'scss/settings/theme-variables';
 @import 'scss/settings/bootstrap-variables.scss';
+@import '~bootstrap/dist/css/bootstrap.min.css';
 
 @import 'scss/bootstrap/bootstrap.scss';
 
@@ -30,7 +30,7 @@ File: style.css
 // Layouts
 @import 'scss/themes/layouts/layouts';
 
-// Componants
+// Components
 @import 'scss/themes/components/components';
 
 // pages
@@ -43,6 +43,108 @@ File: style.css
 @import url('scss/fonts/berry/berry-icons.css'); /** custom font icons - berry **/
 @import 'scss/fonts/tabler-icons.min.css';
 @import 'scss/fonts/phosphor/duotone/style.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Global Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Section Title Styles */
+.section-title {
+    font-family: 'Fredoka', sans-serif; /* Apply Fredoka font here */
+    color: #4B0082; /* Purple */
+}
+
+/* Styled Table */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em; /* Réduit la taille de la police du tableau */
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table thead tr {
+    background-color: #ADD8E6; /* Light Blue */
+    color: #4B0082; /* Purple */
+    text-align: left;
+    font-weight: bold;
+}
+
+.styled-table th {
+    font-weight: bold; /* Ensure bold text */
+    font-family: 'Fredoka', sans-serif; /* Apply Fredoka font here */
+    padding: 10px 12px; /* Adjust padding */
+}
+
+.styled-table td {
+    padding: 10px 12px; /* Ajuste le rembourrage pour s'adapter à la nouvelle taille de police */
+    font-size: 1em; /* Réduit la taille de la police pour th et td */
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #f1f1f1; /* Light Grey on hover */
+}
+
+/* Button Styles */
+.download-button, .validate-button, .not-validate-button, .upload-button, .action-button, .btn-delete {
+    background-color: #4B0082; /* Purple */
+    color: white;
+    border: none;
+    padding: 8px 12px; /* Consistent padding */
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em; /* Consistent font size */
+    margin: 0 0.2em; /* Space between buttons */
+    display: flex; /* Use flex to center content */
+    align-items: center; /* Vertically center content */
+}
+
+/* Delete button specific styles */
+.btn-delete {
+    background-color: #dc3545; /* Bootstrap danger color */
+}
+
+.download-button:hover, .validate-button:hover, .not-validate-button:hover, .upload-button:hover, .action-button:hover, .btn-delete:hover {
+    background-color: #5A009B; /* Darker Purple */
+}
+
+/* Icon styles */
+.download-button i,
+.validate-button i,
+.not-validate-button i,
+.upload-button i,
+.action-button i,
+.btn-delete i {
+    font-size: 1em; /* Consistent icon size */
+    margin-right: 5px; /* Space between icon and text */
+}
+
+/* Hover effects */
+.download-button:hover,
+.validate-button:hover,
+.not-validate-button:hover,
+.upload-button:hover,
+.action-button:hover,
+.btn-delete:hover {
+    background-color: lightblue; /* Change background color on hover */
+    color: white; /* Change text color on hover */
+}
+
+/* Style for the actions column */
+.styled-table td.actions-column {
+    min-width: 150px; /* Adjust width as needed */
+    display: flex; /* Use flexbox to align buttons horizontally */
+    justify-content: flex-start; /* Align buttons to the left */
+    gap: 10px; /* Space between buttons */
+}
+

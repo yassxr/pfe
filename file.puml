@@ -1,0 +1,29 @@
+@startuml file
+actor EEP
+actor AGENT
+
+participant "DocumentService" as DocumentService
+participant "Base de Données" as BD
+
+EEP -> DocumentService: Soumettre un document
+DocumentService -> BD: Stocker les détails du document
+BD --> DocumentService: Confirmation du téléchargement
+DocumentService --> EEP: Document soumis avec succès
+
+EEP -> DocumentService: Suivre le statut du document
+DocumentService -> BD: Récupérer le statut du document
+BD --> DocumentService: Statut du document
+DocumentService --> EEP: Afficher le statut du document
+
+EEP -> DocumentService: Télécharger un document
+DocumentService -> BD: Récupérer le document
+BD --> DocumentService: Document
+DocumentService --> EEP: Télécharger le document
+
+AGENT -> DocumentService: Télécharger un document
+DocumentService -> BD: Récupérer le document
+BD --> DocumentService: Document
+DocumentService --> AGENT: Télécharger le document
+
+@enduml
+

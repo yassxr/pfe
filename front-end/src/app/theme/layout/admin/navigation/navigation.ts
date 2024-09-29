@@ -11,12 +11,14 @@ export interface NavigationItem {
   target?: boolean;
   breadcrumbs?: boolean;
   children?: Navigation[];
+  roles?: string[]; // Added roles property
 }
 
 export interface Navigation extends NavigationItem {
   children?: NavigationItem[];
 }
-const NavigationItems = [
+
+const NavigationItems: NavigationItem[] = [
   {
     id: 'dashboard',
     title: 'Accueil',
@@ -36,101 +38,125 @@ const NavigationItems = [
   },
   {
     id: 'page',
-    title: 'Pages',
+    title: 'Espace EEP',
     type: 'group',
     icon: 'icon-navigation',
     children: [
-      {
-        id: 'Authentication',
-        title: 'Authentication',
-        type: 'collapse',
-        icon: 'ti ti-key',
-        children: [
-          {
-            id: 'login',
-            title: 'Login',
-            type: 'item',
-            url: '/guest/login',
-            target: true,
-            breadcrumbs: false
-          },
-          {
-            id: 'register',
-            title: 'Register',
-            type: 'item',
-            url: '/guest/register',
-            target: true,
-            breadcrumbs: false
-          }
-        ]
-      }
+      
+        {
+          id: 'typography',
+          title: 'Dépot de docs.',
+          type: 'item',
+          classes: 'nav-item',
+          url: '/upload-document',
+          icon: 'ti ti-typography'
+        },
+        {
+          id: 'color',
+          title: 'Coordonnées',
+          type: 'item',
+          classes: 'nav-item',
+          url: '/blank',
+          icon: 'ti ti-brush'
+        }
+      
     ]
   },
   {
     id: 'elements',
-    title: 'Elements',
+    title: 'Espace AGENT',
     type: 'group',
     icon: 'icon-navigation',
     children: [
+
       {
-        id: 'typography',
-        title: 'Typography',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/typography',
-        icon: 'ti ti-typography'
+        id: 'Documents',
+        title: 'Documents',
+        type: 'collapse',
+        icon: 'ti ti-vocabulary',
+        children: [
+          {
+            id: 'en attente',
+            title: 'En attente',
+            type: 'item',
+            url: '/waiting-list',
+            breadcrumbs: false
+          },
+          {
+            id: 'validated',
+            title: 'Validés',
+            type: 'item',
+            url: '/validated-list',
+            breadcrumbs: false
+          },
+          {
+            id: 'nonvalidated',
+            title: 'Non validés',
+            type: 'item',
+            url: '/non-validated-list',
+            breadcrumbs: false
+          },
+        ]
       },
       {
-        id: 'color',
-        title: 'Colors',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/color',
-        icon: 'ti ti-brush'
+        id: 'eep',
+        title: 'Liste des EEPs',
+        type: 'collapse',
+        icon: 'ti ti-key',
+        children: [
+          {
+            id: 'actifs',
+            title: 'Actifs',
+            type: 'item',
+            url: '/eep-active',
+            breadcrumbs: false
+          },
+          {
+            id: 'old',
+            title: 'Antérieurs',
+            type: 'item',
+            url: '/eep-old',
+            breadcrumbs: false
+          }
+        ]
       },
       {
-        id: 'tabler',
-        title: 'Tabler',
+        id: 'sample-page',
+        title: 'Créer EEP',
         type: 'item',
+        url: '/create-eep',
         classes: 'nav-item',
-        url: 'https://tabler-icons.io/',
-        icon: 'ti ti-plant-2',
-        target: true,
-        external: true
+        icon: 'ti ti-brand-chrome'
       }
     ]
   },
-  {
-    id: 'other',
-    title: 'Other',
-    type: 'group',
-    icon: 'icon-navigation',
-    children: [
-      {
-        id: 'sample-page',
-        title: 'Liste des EEPs',
-        type: 'item',
-        url: '/sample-page',
-        classes: 'nav-item',
-        icon: 'ti ti-brand-chrome'
-      },
-      {
-        id: 'document',
-        title: 'Document',
-        type: 'item',
-        classes: 'nav-item',
-        url: 'https://codedthemes.gitbook.io/berry-angular/',
-        icon: 'ti ti-vocabulary',
-        target: true,
-        external: true
-      }
-    ]
-  }
+  
 ];
 
 @Injectable()
-export class NavigationItem {
-  get() {
-    return NavigationItems;
+export class NavigationService {
+  private userRole: string; // Assume this holds the current user's role
+
+  constructor() {
+    // You should set this from your authentication service
+    this.userRole = 'EEP'; // For demonstration, set the user role here
   }
+
+  get() {
+    return this.filterNavigationItems(NavigationItems);
+  }
+
+  private filterNavigationItems(items: NavigationItem[]): NavigationItem[] {
+    return items.map(item => {
+      if (item.children) {
+        item.children = this.filterNavigationItems(item.children);
+      }
+      // Check if the item has a roles property and if the user has the required role
+      if (item.roles && !item.roles.includes(this.userRole)) {
+        return null; // Exclude this item if the role doesn't match
+      }
+      return item;
+    }).filter(Boolean); // Remove null items
+  }
+  
 }

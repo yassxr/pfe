@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Location, LocationStrategy } from '@angular/common';
 
 // project import
-import { NavigationItem } from '../navigation';
+import { NavigationService } from '../navigation';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -23,7 +23,7 @@ export class NavContentComponent implements OnInit {
 
   // Constructor
   constructor(
-    public nav: NavigationItem,
+    public nav: NavigationService,
     private location: Location,
     private locationStrategy: LocationStrategy
   ) {
