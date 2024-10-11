@@ -95,8 +95,19 @@ public class AuthenticationService {
                         input.getPassword()
                 )
         );
+        
+        User user = userRepository.findByEmail(input.getEmail())
+        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return userRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+// Check if the user is an EEP and verify their endDate
+if (user instanceof EEP) {
+    EEP eepUser = (EEP) user;
+    if (eepUser.getEndDate() != null && eepUser.getEndDate().isBefore(LocalDate.now())) {
+        throw new UsernameNotFoundException("Account expired");
     }
+}
+
+return user;
+}
+
 }

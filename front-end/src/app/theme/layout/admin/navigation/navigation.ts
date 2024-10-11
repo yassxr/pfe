@@ -45,20 +45,34 @@ const NavigationItems: NavigationItem[] = [
       
         {
           id: 'typography',
-          title: 'Dépot de docs.',
+          title: 'Déposer',
           type: 'item',
           classes: 'nav-item',
           url: '/upload-document',
           icon: 'ti ti-typography'
         },
         {
-          id: 'color',
-          title: 'Coordonnées',
-          type: 'item',
-          classes: 'nav-item',
-          url: '/blank',
-          icon: 'ti ti-brush'
-        }
+          id: 'Inventaire',
+          title: 'Inventaire',
+          type: 'collapse',
+          icon: 'ti ti-mail',
+          children: [
+            {
+              id: 'en attente',
+              title: 'Validés',
+              type: 'item',
+              url: '/upload-validated',
+              breadcrumbs: false
+            },
+            {
+              id: 'validated',
+              title: 'Non validés',
+              type: 'item',
+              url: '/upload-non-validated',
+              breadcrumbs: false
+            }
+          ]
+        },
       
     ]
   },

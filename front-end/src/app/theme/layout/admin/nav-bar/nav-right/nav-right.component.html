@@ -5,40 +5,27 @@
           class="pc-head-link head-link-primary dropdown-toggle arrow-none me-0"
           data-bs-toggle="dropdown"
           href="javascript:"
-          ngbDropdownToggle
-        >
-          <img src="assets/images/user/avatar-2.jpg" alt="user-image" class="user-avtar" />
+          ngbDropdownToggle>
           <span>
             <i class="ti ti-settings"></i>
           </span>
         </a>
         <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown" ngbDropdownMenu>
           <div class="dropdown-header">
-            <h4> Good Morning, <span class="small text-muted" style="font-size: 0.8em;">{{ userName }}</span> </h4>
+            <h4> Bienvenue, <span class="small text-muted" style="font-size: 0.8em;">{{ userName }}</span> </h4>
             <p class="text-muted">Project PFE</p>
-            <form class="header-search">
-              <div class="search-btn">
-                <i class="ti ti-search"></i>
-              </div>
-              <input type="search" class="form-control" placeholder="Search profile options" />
-            </form>
             <hr />
             <ng-scrollbar style="height: calc(100vh - 280px)" visibility="hover">
               <hr />
-              <div class="settings-block bg-light-primary rounded">
-              </div>
               <hr />
-              <a [routerLink]="['/guest/register']" class="dropdown-item">
+              <a [routerLink]="['/change-password']" class="dropdown-item">
                 <i class="ti ti-settings"></i>
-                <span>Account Profile</span>
+                <span>Changer votre mot de passe</span>
               </a>
-              <a href="javascript:" class="dropdown-item">
-                <i class="ti ti-user"></i>
-                <span>Social Profile</span>
-              </a>
+
               <a href="javascript:" (click)="onLogout()" class="dropdown-item">
                 <i class="ti ti-logout"></i>
-                <span>Logout</span>
+                <span>Déconnexion</span>
               </a>
             </ng-scrollbar>
           </div>

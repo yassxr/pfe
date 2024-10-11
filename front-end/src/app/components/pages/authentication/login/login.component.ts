@@ -41,6 +41,8 @@ export default class LoginComponent {
 
   onSubmit() {
     this.submitted = true;
+    this.error = null; // Reset error on each submission
+
 
     if (this.loginForm.invalid) {
       return;
@@ -52,8 +54,8 @@ export default class LoginComponent {
         next: () => {
           this.router.navigate(['/default']);
         },
-        error: error => {
-          this.error = error;
+        error: err => {
+          this.error = err.error || 'Login failed. Please try again.'; // Display error message
           this.loading = false;
         }
       });

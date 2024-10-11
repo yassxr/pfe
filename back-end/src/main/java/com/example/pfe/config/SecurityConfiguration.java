@@ -38,11 +38,12 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/documents/user/**").permitAll()
                     .requestMatchers("/auth/signup").permitAll() // Allow all requests under /auth
-                    .requestMatchers("/sample-page").hasRole("AGENT")
                     .requestMatchers(HttpMethod.POST, "/documents/upload").permitAll()  // Allow all users to upload documents
-                    .requestMatchers(HttpMethod.GET, "/documents/**").hasAnyRole("EEP", "AGENT")  // Allow EEP and AGENT to access documents
+                    .requestMatchers(HttpMethod.GET, "/documents/**").permitAll()  // Allow EEP and AGENT to access documents
                     .requestMatchers("/documents/download/**").hasAnyRole("AGENT", "EEP") // Restrict access to download documents to AGENT and EEP
+                    .requestMatchers(HttpMethod.GET, "/api/documents/user/**").hasAnyRole("EEP", "AGENT")
                     .anyRequest().authenticated()
                 )                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

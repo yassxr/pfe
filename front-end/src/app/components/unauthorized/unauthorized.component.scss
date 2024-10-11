@@ -1,0 +1,20 @@
+.unauthorized-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffcccc; /* Light red background */
+  }
+  
+  .error-message-large {
+    color: #ff0000; /* Bold red */
+    font-size: 4rem;
+    font-weight: bold;
+  }
+  
+  .error-message-small {
+    color: #ff0000; /* Red */
+    font-size: 1.5rem;
+  }
+  

@@ -41,6 +41,11 @@ export class AuthService {
     }
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('token'); // Ensure this matches your storage logic
+  }
+  
+  
   login(email: string, password: string) {
     return this.http.post<any>(`${this.baseUrl}/login`, { email, password })
       .pipe(map(user => {

@@ -27,6 +27,22 @@ const routes: Routes = [
         data: { roles: ['EEP'] }
       },
       {
+        path: 'upload-validated',
+        loadComponent: () => import('./components/upload-validated/upload-validated.component').then(c => c.UploadValidatedComponent),
+        canActivate: [AuthGuard],
+        data: { roles: ['EEP'] }
+      },
+      {
+        path: 'upload-non-validated',
+        loadComponent: () => import('./components/upload-non-validated/upload-non-validated.component').then(c => c.UploadNonValidatedComponent),
+        canActivate: [AuthGuard],
+        data: { roles: ['EEP'] }
+      },
+      {
+        path: 'change-password',
+        loadComponent: () => import('./components/change-password/change-password.component').then(c => c.ChangePasswordComponent)
+      },
+      {
         path: 'waiting-list',
         loadComponent: () => import('./components/waiting-list/waiting-list.component').then(c => c.WaitingListComponent),
         canActivate: [AuthGuard],
@@ -35,6 +51,7 @@ const routes: Routes = [
       {
         path: 'validated-list',
         loadComponent: () => import('./components/validated-list/validated-list.component').then(c => c.ValidatedListComponent),
+        canActivate: [AuthGuard],
         data: { roles: ['AGENT'] }
       },
       {
@@ -64,6 +81,9 @@ const routes: Routes = [
         loadComponent: () => import('./components/eep-old/eep-old.component').then(c => c.EepOldComponent),
         canActivate: [AuthGuard],
         data: { roles: ['AGENT'] }
+       },
+       { path: 'unauthorized', 
+        loadComponent: () => import('./components/unauthorized/unauthorized.component').then(c => c.UnauthorizedComponent),
        }
 
     ],

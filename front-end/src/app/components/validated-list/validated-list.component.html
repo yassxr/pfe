@@ -1,14 +1,22 @@
 <!-- Validated Documents -->
 <div class="upload-document-container">
   <h2 class="section-title">Vos documents validés</h2>
+  <div class="select-container">
+    <label class="select-label" for="userSelect">Sélectionner</label>
+    <select id="userSelect" (change)="onEmailChange($event)">
+      <option value="all">Tous les EEPs</option>
+      <option *ngFor="let user of userEmails" [value]="user.email">{{ user.email }}</option>
+    </select>
+  </div>
+  
   <table class="styled-table">
       <thead>
           <tr>
               <th>Nom du fichier</th>
               <th>Date de dépôt</th>
-              <th>Status</th>
               <th>Déposé par</th>
               <th>Date de validation</th>
+              <th>Traité par</th> <!-- Added Processed By column -->
               <th>Actions</th>
           </tr>
       </thead>
@@ -16,10 +24,9 @@
           <tr *ngFor="let document of documents">
               <td>{{ document.fileName }}</td>
               <td>{{ document.uploadDate | date: 'short' }}</td>
-              <td [ngClass]="{'status-validated': document.status === 'Validé', 'status-non-validated': document.status === 'Non validé'}">
-                {{ document.status || 'N/A' }} <!-- Use N/A if status is undefined -->
-                  <td>{{ document.submittedBy }}</td>
+              <td>{{ document.submittedBy }}</td>
               <td>{{ document.validationDate | date: 'short' }}</td>
+              <td>{{ document.processedBy || 'N/A' }}</td> <!-- Display processedBy or N/A -->
               <td class="actions-column"> <!-- Added class for actions column -->
                   <button (click)="downloadDocument(document.id)" class="download-button">
                       <i class="fas fa-download"></i> Sauvegarder

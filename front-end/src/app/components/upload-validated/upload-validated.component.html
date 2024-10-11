@@ -1,0 +1,37 @@
+<!-- Validated Documents -->
+<div class="upload-document-container">
+    <h2 class="section-title">Vos documents validés</h2>
+    
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Nom du fichier</th>
+                <th>Date de dépôt</th>
+                <th>Date de validation</th>
+                <th>Traité par</th> <!-- Added Processed By column -->
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let document of documents">
+                <td>{{ document.fileName }}</td>
+                <td>{{ document.uploadDate | date: 'short' }}</td>
+                <td>{{ document.validationDate | date: 'short' }}</td>
+                <td>{{ document.processedBy || 'N/A' }}</td> <!-- Display processedBy or N/A -->
+                <td class="actions-column"> <!-- Added class for actions column -->
+                    <button (click)="downloadDocument(document.id)" class="download-button">
+                        <i class="fas fa-download"></i> Sauvegarder
+                    </button>
+                    <button 
+                        class="btn btn-danger btn-delete" 
+                        (click)="deleteDocument(document.id)"
+                        title="Delete Document">
+                        <i class="fas fa-trash-alt"></i> <!-- Font Awesome trash icon -->
+                        Supprimer
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+  

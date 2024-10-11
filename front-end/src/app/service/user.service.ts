@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { DocumentDto } from '../models/document.model';
+import { UserDto } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +51,9 @@ export class UserService {
     getOldEepUsers(): Observable<any[]> {
       return this.http.get<any[]>(`${this.baseUrl}/old-users`); // Adjust the endpoint as needed
     }
+    getAllUserEmails(): Observable<UserDto[]> {
+      return this.http.get<UserDto[]>(`${this.baseUrl}/emails`);
+    }
 
-}
+  }
 

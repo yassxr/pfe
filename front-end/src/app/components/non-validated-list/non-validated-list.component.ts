@@ -1,8 +1,9 @@
-// src/app/components/non-validated-list/non-validated-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { DocumentService } from '../../service/document.service';
 import { DocumentDto } from '../../models/document.model';
 import { CommonModule } from '@angular/common';
+import { UserDto } from 'src/app/models/user.model';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-non-validated-list',
@@ -12,19 +13,75 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./non-validated-list.component.scss']
 })
 export class NonValidatedListComponent implements OnInit {
-  documents: DocumentDto[] = [];
+  documents: DocumentDto[] = []; 
+  selectedEmail: string | null = null;
+  userEmails: UserDto[] = [];
 
-  constructor(private documentService: DocumentService) {}
+  constructor(private documentService: DocumentService, private userService: UserService) {}
 
   ngOnInit(): void {
-    this.loadNonValidatedDocuments();
+    this.loadUserEmails();
+    this.selectedEmail = 'all'; // Set the default selection to 'all'
+    this.loadDocuments(); // Load documents for all users on init
   }
 
-  loadNonValidatedDocuments(): void {
-    this.documentService.getNonValidatedDocuments().subscribe((documents) => {
-      this.documents = documents;
-    });
+  loadUserEmails(): void {
+    this.userService.getAllUserEmails().subscribe(
+      (data: any[] | null) => {
+        console.log('API Response:', data); // Log the response to check the structure
+  
+        // Check if the data is valid
+        if (data && Array.isArray(data)) {
+          // Filter users who have the 'EEP' role
+          this.userEmails = data.filter(user => 
+            user.roles && user.roles.includes('EEP')
+          );
+        } else {
+          // Handle case where data is null or not an array
+          this.userEmails = [];
+          console.error('No user data available or data is not an array');
+        }
+      },
+      (error) => {
+        console.error('Error fetching user emails:', error);
+      }
+    );
   }
+
+  loadDocuments(): void {
+    if (this.selectedEmail === 'all') {
+      this.documentService.getAllNonValidatedDocuments().subscribe(
+        (data) => {
+          this.documents = data;
+        },
+        (error) => {
+          console.error('Error fetching pending documents:', error);
+        }
+      );
+    } else if (this.selectedEmail) {
+      const userId = this.getUserIdByEmail(this.selectedEmail);
+      this.documentService.getNonValidatedDocumentsByUserId(userId).subscribe(
+        (data) => {
+          this.documents = data;
+        },
+        (error) => {
+          console.error('Error fetching documents:', error);
+        }
+      );
+    }
+  }
+
+  onEmailChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedEmail = selectElement.value;
+    this.loadDocuments();
+  }
+
+  private getUserIdByEmail(email: string): number {
+    const user = this.userEmails.find(user => user.email === email);
+    return user ? user.id : null;
+  }
+
 
   downloadDocument(documentId: number): void {
     this.documentService.downloadDocument(documentId).subscribe({
@@ -43,10 +100,8 @@ export class NonValidatedListComponent implements OnInit {
   }
 
   deleteDocument(documentId: number): void {
-    // Call the service method to delete the document
     this.documentService.deleteDocument(documentId).subscribe({
       next: () => {
-        // Remove the document from the local list after successful deletion
         this.documents = this.documents.filter(doc => doc.id !== documentId);
       },
       error: (error) => {
@@ -54,5 +109,4 @@ export class NonValidatedListComponent implements OnInit {
       }
     });
   }
-
 }

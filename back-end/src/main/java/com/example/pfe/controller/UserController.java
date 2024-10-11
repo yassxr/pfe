@@ -2,18 +2,28 @@ package com.example.pfe.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+
+import com.example.pfe.dto.ChangePasswordDto;
 import com.example.pfe.dto.EepRequest;
 import com.example.pfe.entity.EEP;
 import com.example.pfe.entity.User;
+import com.example.pfe.repository.UserRepository;
 import com.example.pfe.service.UserService;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequestMapping("/users")
 @RestController
@@ -75,6 +85,35 @@ public class UserController {
     @GetMapping("/old-users")
     public List<EEP> getExpiredEepUsers() {
         return userService.getExpiredEepUsers();
+    }
+
+    private UserRepository userRepository; // Assurez-vous d'avoir ce repository
+
+    @GetMapping("/emails")
+    public List<Map<String, Object>> getAllUserEmails() {
+        return userService.getAllUsers().stream()
+            .map(user -> {
+                Map<String, Object> userMap = new HashMap<>();
+                userMap.put("id", user.getId());
+                userMap.put("email", user.getEmail());
+                userMap.put("roles", user.getRoles().stream()
+                    .map(role -> role.getName())
+                    .collect(Collectors.toList()));
+                return userMap;
+            })
+            .collect(Collectors.toList());
+    }
+    
+
+    @PutMapping("/{userId}/change-password")
+    public ResponseEntity<?> changePassword(@PathVariable Integer userId, @RequestBody ChangePasswordDto changePasswordDto) {
+        // Implement logic to change the password using userId and changePasswordDto
+        boolean isChanged = userService.changePassword(userId, changePasswordDto);
+        if (isChanged) {
+            return ResponseEntity.ok("Password changed successfully.");
+        } else {
+            return ResponseEntity.status(403).body("Failed to change password.");
+        }
     }
     
 }

@@ -3,6 +3,7 @@ package com.example.pfe.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,9 @@ import com.example.pfe.entity.User;
 import com.example.pfe.entity.Document;
 import com.example.pfe.repository.DocumentRepository;
 import com.example.pfe.repository.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -74,44 +78,72 @@ public class DocumentService {
     
     
     public List<DocumentDto> getAllDocuments() {
-        List<Document> documents = documentRepository.findAll();
+        return documentRepository.findAll().stream()
+                .map(this::convertToDto) // Assuming you have a method to convert Document to DocumentDto
+                .collect(Collectors.toList());
+    }
+
+    public List<DocumentDto> findDocumentsByUserId(Integer userId) {
+        List<Document> documents = documentRepository.findByUserId(userId);
+        // Convert List<Document> to List<DocumentDto>
         return documents.stream()
-                        .map(this::convertToDto)
-                        .collect(Collectors.toList());
+                .map(this::convertToDto) // Convert each Document to DocumentDto
+                .collect(Collectors.toList());
     }
-
-    public List<Document> findDocumentsByUserId(Integer userId) {
-        return documentRepository.findByUserId(userId);
-    }
-
+    
     public List<Document> findAll() {
         return documentRepository.findAll(); // Fetch all documents from the repository
     }
+public Document updateStatus(Long id, String newStatus, String agentEmail) {
+    Optional<Document> optionalDocument = documentRepository.findById(id);
 
-    public Document updateStatus(Long id, String newStatus) {
-        Optional<Document> optionalDocument = documentRepository.findById(id);
-
-        if (optionalDocument.isPresent()) {
-            Document document = optionalDocument.get();
-            document.setStatus(newStatus);
-                if ("Validé".equals(newStatus)) {
-        document.setValidationDate(LocalDateTime.now());  // Set validation date if status is "Validé"
-    } // Assuming there is a setStatus method in Document entity
-            return documentRepository.save(document); // Save the updated document
-        } else {
-            throw new RuntimeException("Document not found with ID: " + id);
-        }
+    if (!optionalDocument.isPresent()) {
+        throw new NoSuchElementException("Document not found with ID: " + id);
     }
 
-    private DocumentDto convertToDto(Document document) {
-        String submittedBy = document.getUser() != null ? document.getUser().getEmail() : null; // Fetch user email
-        return new DocumentDto(
-            document.getId(), 
-            document.getFileName(), 
-            document.getUploadDate(), 
-            document.getValidationDate(), // Add validation date here
-            document.getStatus(), 
-            submittedBy
+    Document document = optionalDocument.get();
+    document.setStatus(newStatus);
+
+    // Set the email of the agent who processed the document
+    document.setProcessedBy(agentEmail);
+
+    if ("Validé".equals(newStatus)) {
+        document.setValidationDate(LocalDateTime.now()); // Set validation date if status is "Validé"
+    }
+
+    // Log the updated document before saving
+    System.out.println("Updating Document: " + document);
+
+    return documentRepository.save(document); // Save the updated document
+}
+
+
+    public void invalidateDocument(Long documentId, String rejectionReason, String agentEmail) {
+        Document document = documentRepository.findById(documentId)
+                .orElseThrow(() -> new EntityNotFoundException("Document not found"));
+
+        document.setStatus("Non validé");
+        document.setProcessedBy(agentEmail); // Ensure processedBy is set
+        document.setRejectionReason(rejectionReason);
+        document.setNonValidationDate(LocalDateTime.now()); // Set the current date for non-validation
+        documentRepository.save(document);
+    }
+    
+    
+
+        private DocumentDto convertToDto(Document document) {
+            String submittedBy = document.getUser() != null ? document.getUser().getEmail() : null; // Fetch user email
+            return new DocumentDto(
+                document.getId(),
+                document.getFileName(),
+                document.getUploadDate(),
+                document.getValidationDate(),
+                document.getStatus(),
+                submittedBy,
+                document.getNonValidationDate(),
+                document.getRejectionReason(),
+                document.getProcessedBy(),
+                document.getUser() != null ? document.getUser().getId() : null // Handle potential null user
         );
     }
     
@@ -152,6 +184,43 @@ public class DocumentService {
             throw new RuntimeException("Document not found with ID: " + id);
         }
     }
+
+    public List<DocumentDto> getAllPendingDocuments() {
+        List<Document> documents = documentRepository.findByStatus("En attente");
+        System.out.println("Called getNonValidatedDocuments");
+        System.out.println("Pending Documents: " + documents); // Log the retrieved documents
+        return documents.stream()
+                                    .map(this::convertToDto)
+                                    .collect(Collectors.toList());
+    }
+
+    public List<DocumentDto> getPendingDocumentsByUserId(Integer userId) {
+        List<Document> documents = documentRepository.findByUserIdAndStatus(userId, "En attente");
+        return documents.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<DocumentDto> getValidatedDocumentsByUserId(Integer userId) {
+        List<Document> documents = documentRepository.findByUserIdAndStatus(userId, "Validé");
+        return documents.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<DocumentDto> getNonValidatedDocumentsByUserId(Integer userId) {
+        List<Document> documents = documentRepository.findByUserIdAndStatus(userId, "Non validé");
+        return documents.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
     
+    public List<DocumentDto> getUserDocuments(Integer userId) {
+        List<Document> documents = documentRepository.findByUserId(userId);
+        // Convert List<Document> to List<DocumentDto>
+        return documents.stream()
+            .map(this::convertToDto) // Use a method reference or a lambda expression
+            .collect(Collectors.toList());
+    }
     
 }

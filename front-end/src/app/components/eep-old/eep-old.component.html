@@ -20,7 +20,7 @@
           <td>{{ eep.raison }}</td>
           <td>{{ eep.endDate | date:'shortDate' }}</td>
           <td>
-            <button class="btn btn-edit" (click)="editEep(eep.email)">Modifier</button>
+            <button (click)="editEepUser(eep.email)" class="btn btn-edit">Modifier</button>
           </td>
         </tr>
       </tbody>

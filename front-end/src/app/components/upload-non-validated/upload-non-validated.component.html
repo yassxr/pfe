@@ -1,19 +1,12 @@
-<!-- Non-Validated Documents -->
+<!-- Validated Documents -->
 <div class="upload-document-container">
     <h2 class="section-title">Vos documents non validés</h2>
-    <div class="select-container">
-        <label class="select-label" for="userSelect">Sélectionner:</label>
-        <select id="userSelect" (change)="onEmailChange($event)">
-          <option value="all">Tous les EEPs</option>
-          <option *ngFor="let user of userEmails" [value]="user.email">{{ user.email }}</option>
-        </select>
-      </div>
+    
     <table class="styled-table">
         <thead>
             <tr>
                 <th>Nom du fichier</th>
                 <th>Date de dépôt</th>
-                <th>Déposé par</th>
                 <th>Motifs de refus</th>
                 <th>Date de non validation</th>
                 <th>Traité par</th>
@@ -24,7 +17,7 @@
             <tr *ngFor="let document of documents">
                 <td>{{ document.fileName }}</td>
                 <td>{{ document.uploadDate | date:'short' }}</td>
-                <td>{{ document.submittedBy }}</td>
+
                 <td>{{ document.rejectionReason || 'N/A' }}</td>  <!-- New Column for Rejection Reason -->
                 <td>{{ document.nonValidationDate ? (document.nonValidationDate | date:'short') : 'N/A' }}</td>
                 <td>{{ document.processedBy || 'Not Processed' }}</td> <!-- Update this line -->
@@ -40,4 +33,5 @@
             </tr>
         </tbody>
     </table>
-</div>
+  </div>
+  

@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DocumentDto } from '../models/document.model'; // Adjust the path as needed
+import { UserDto } from '../models/user.model'; // Adjust the path as needed
 
 
 @Injectable({
@@ -15,16 +16,48 @@ export class DocumentService {
   constructor(private http: HttpClient) {}
 
   getUserDocuments(userId: number): Observable<DocumentDto[]> {
-    return this.http.get<DocumentDto[]>(`${this.baseUrl}/user/${userId}/documents`);
+    return this.http.get<DocumentDto[]>(`${this.baseUrl}/user/${userId}`);
   }
-
-  getAllDocuments(): Observable<DocumentDto[]> {
-    return this.http.get<DocumentDto[]>(`${this.baseUrl}/all`); // Ensure this URL matches your backend endpoint
+  getUsers(): Observable<UserDto[]> { // Add this method to get users
+    return this.http.get<UserDto[]>(`http://localhost:8005/users/`); // Adjust the URL as needed
+  }
+getAllDocuments(): Observable<DocumentDto[]> {
+  return this.http.get<DocumentDto[]>(`${this.baseUrl}/all`); // Adjust according to your API
 }
-  updateStatus(documentId: number, status: string): Observable<Document> {
-    return this.http.put<Document>(`${this.baseUrl}/${documentId}/status`, status);
-  }
+
+
+updateDocumentStatus(documentId: number, statusMap: { status: string }): Observable<DocumentDto> {
+  return this.http.put<DocumentDto>(`${this.baseUrl}/${documentId}/status`, statusMap);
+}
+
+getPendingDocumentsByUserId(userId: number): Observable<DocumentDto[]> {
+  return this.http.get<DocumentDto[]>(`${this.baseUrl}/${userId}/pending`);
+}
+
   
+    // Fetch all pending documents
+getAllValidatedDocuments(): Observable<DocumentDto[]> {
+      return this.http.get<DocumentDto[]>(`${this.baseUrl}/all/validated`); // Adjust according to your API if needed
+    }
+
+    getValidatedDocumentsByUserId(userId: number): Observable<DocumentDto[]> {
+      return this.http.get<DocumentDto[]>(`${this.baseUrl}/${userId}/validated`);
+    }
+    
+      
+        // Fetch all pending documents
+    getAllPendingDocuments(): Observable<DocumentDto[]> {
+          return this.http.get<DocumentDto[]>(`${this.baseUrl}/all/pending`); // Adjust according to your API if needed
+        }
+
+        getAllNonValidatedDocuments(): Observable<DocumentDto[]> {
+          return this.http.get<DocumentDto[]>(`${this.baseUrl}/all/non-validated`); // Adjust according to your API if needed
+        }
+    
+        getNonValidatedDocumentsByUserId(userId: number): Observable<DocumentDto[]> {
+          return this.http.get<DocumentDto[]>(`${this.baseUrl}/${userId}/non-validated`);
+        }
+
   uploadDocument(file: File, userId: number): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
@@ -40,16 +73,10 @@ export class DocumentService {
 
   // src/app/services/document.service.ts
 
-getNonValidatedDocuments(): Observable<DocumentDto[]> {
-  return this.http.get<DocumentDto[]>(`${this.baseUrl}/non-validated`);
-}
 
-getValidatedDocuments(): Observable<DocumentDto[]> {
-  return this.http.get<DocumentDto[]>(`${this.baseUrl}/validated`);
-}
 
-invalidateDocument(documentId: number): Observable<any> {
-  return this.http.put(`${this.baseUrl}/${documentId}/invalidate`, {});
+invalidateDocument(documentId: number, rejectionReason: string): Observable<void> {
+  return this.http.put<void>(`${this.baseUrl}/${documentId}/invalidate`, { rejectionReason });
 }
 
 deleteDocument(documentId: number): Observable<void> {

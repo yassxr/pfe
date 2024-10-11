@@ -4,15 +4,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.pfe.dto.ChangePasswordDto;
 import com.example.pfe.entity.EEP;
 import com.example.pfe.entity.Role;
 import com.example.pfe.entity.RoleName;
@@ -98,7 +102,8 @@ public class UserService {
     }
 
     public List<EEP> getActiveEepUsers() {
-        return eepRepository.findAllByEndDateIsNull(); // Ensure this method is defined in your EEPRepository
+        LocalDate currentDate = LocalDate.now(); // Use LocalDate.now() to get today's date
+        return eepRepository.findAllActiveEeps(currentDate);
     }
 
     // Delete EEP user by email
@@ -132,5 +137,33 @@ public class UserService {
         LocalDate today = LocalDate.now();
         return eepRepository.findByEndDateBefore(today);
     }
+
+    public List<String> getAllUserEmails() {
+        return userRepository.findAll().stream()
+            .map(user -> user.getEmail()) // Return just the email
+            .collect(Collectors.toList());
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll(); // You can use this if needed
+    }
+
     
+    public boolean changePassword(Integer userId, ChangePasswordDto changePasswordDto) {
+        // Find the user by userId
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found")); // Handle user not found
+
+        // Check if the old password matches
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        // Set the new password
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+
+        // Save the updated user
+        userRepository.save(user);
+        return true; // Password changed successfully
+    }
 }
